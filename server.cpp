@@ -10,6 +10,15 @@
 #include "Knn.h"
 
 using namespace std;
+void checkingArg(int k, string dis) {
+    if((k<=0) ||
+       ((dis != "AUC") && (dis != "MAN") && (dis != "CHB")
+        && (dis != "CAN") && (dis != "MIN"))) {
+        cout << "Input not valid!" << endl;
+        return;
+    }
+}
+
 
 void checkingStr(string &str,string &distance, vector<double> &v1, int &k) {
     k = -1;
@@ -40,6 +49,19 @@ void checkingStr(string &str,string &distance, vector<double> &v1, int &k) {
         cout << "invalid input"<<endl;
         return;
     }
+    checkingArg(k, distance);
+}
+
+void checkingArgv(int port, string fileName) {
+    string str2 = "csv";
+   if(port < 1023 || port > 65535) {
+       cout<< "invalid port number!"<< endl;
+       exit(1);
+   }
+   if(strstr(fileName.c_str(), str2.c_str())) {
+       cout << "invalid file!" << endl;
+       exit(1);
+   }
 }
 
 int main (int argc, char *argv[]) {
@@ -50,6 +72,7 @@ int main (int argc, char *argv[]) {
     int neighbor;
     string file = argv[1];
     const int server_port = stoi(argv[2]);
+    checkingArgv(server_port, file);
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock < 0) {
         cout << "error creating socket" <<endl;
