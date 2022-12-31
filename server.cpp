@@ -20,41 +20,46 @@ void checkingArg(int k, string dis) {
 }
 
 
-void checkingStr(string &str,string &distance, vector<double> &v1, int &k) {
+void checkingStr(string str,string &distance, vector<double> &v1, int &k) {
     k = -1;
     double num;
     int checkInt;
     stringstream ss;
-    char character;
+    string checkStr;
     stringstream stringstream1(str);
-    while(stringstream1 >> num) {
+    while (stringstream1 >> num) {
         v1.push_back(num);
     }
-    if(v1.empty()) {
-        cout << "invalid input" <<endl;
+    if (v1.empty()) {
+        cout << "invalid input" << endl;
         return;
     }
-    while(stringstream1 >> character) {
-        ss << character;
+    stringstream1.clear();
+    if(stringstream1 >> checkStr) {
+        ss << checkStr;
     }
     distance = ss.str();
-    if(str.empty()) {
-        cout << "invalid input"<<endl;
+    if (str.empty()) {
+        cout << "invalid input" << endl;
         return;
     }
-    if(stringstream1 >> checkInt) {
+    stringstream1.clear();
+    if (stringstream1 >> checkInt) {
         k = checkInt;
     }
-    if(k == -1) {
-        cout << "invalid input"<<endl;
+    if (k == -1) {
+        cout << "invalid input" << endl;
         return;
+    }
+    if(!stringstream1.eof()) {
+        cout << "invalid input" << endl;
     }
     checkingArg(k, distance);
 }
 
 void checkingArgv(int port, string fileName) {
     string str2 = "csv";
-   if(port < 1023 || port > 65535) {
+   if(port < 1 || port > 65535) {
        cout<< "invalid port number!"<< endl;
        exit(1);
    }
