@@ -10,6 +10,12 @@
 #include "Knn.h"
 
 using namespace std;
+
+/**
+ * checking arguments.
+ * @param k - should be a number > 0.
+ * @param dis - should be one of the distance we got in knn.
+ */
 void checkingArg(int k, string dis) {
     if((k<=0) ||
        ((dis != "AUC") && (dis != "MAN") && (dis != "CHB")
@@ -19,7 +25,13 @@ void checkingArg(int k, string dis) {
     }
 }
 
-
+/**
+ * checking buffer from client.
+ * @param str - the string we got in buffer from client.
+ * @param distance - MAN/AUC/CHB/MIN/CAN.
+ * @param v1 - vector for calculating distance.
+ * @param k - the k neighbors.
+ */
 void checkingStr(string str,string &distance, vector<double> &v1, int &k) {
     k = -1;
     double num;
@@ -57,6 +69,11 @@ void checkingStr(string str,string &distance, vector<double> &v1, int &k) {
     checkingArg(k, distance);
 }
 
+/**
+ * checking arguments.
+ * @param port - port.
+ * @param fileName - should be .csv.
+ */
 void checkingArgv(int port, string fileName) {
     string str2 = "csv";
    if(port < 1 || port > 65535) {
