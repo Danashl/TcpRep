@@ -19,6 +19,7 @@ Knn::Knn(int k, string disName, vector<double> v1) {
     this->k = k;
     this->disName = disName;
     this->vecInput = v1;
+    this->message = "";
 }
 
 /**
@@ -122,11 +123,19 @@ void Knn::getSignificant(vector<pair<double, string>> pairs) {
     for(i = 0; i < this->k; i++) {
         map[pairs[i].second]++;
         temp = map[pairs[i].second];
-        if(max <= temp) {
+        if (max <= temp) {
             max = temp;
             res = pairs[i].second;
         }
     }
-    cout << res << endl;
+    this->message = res;
+}
+
+/**
+ * get the message to client.
+ * @return the string that knn calculate and the client will print.
+ */
+string Knn::getMessage() {
+    return this->message;
 }
 

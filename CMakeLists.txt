@@ -10,4 +10,5 @@ add_executable(TcpRep
         DistanceClass.h
         Knn.cpp
         Knn.h
+        server.cpp
         main.cpp)
