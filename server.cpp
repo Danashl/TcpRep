@@ -93,7 +93,7 @@ int main (int argc, char *argv[]) {
     string distance;
     int neighbor;
     string file = argv[1];
-    const int server_port = stoi(argv[2]);
+    const int server_port = atoi(argv[2]);
     checkingArgv(server_port, file);
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock < 0) {
@@ -116,26 +116,28 @@ int main (int argc, char *argv[]) {
     if(client_sock < 0) {
         cout<<"error accepting client"<<endl;
     }
-    char buffer[4096];
-    int expected_data_len = sizeof(buffer);
-    int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
-    if(read_bytes == 0) {
-        cout<<"no message from client"<<endl;
+    while(true) {
+        char buffer[4096];
+        int expected_data_len = sizeof(buffer);
+        int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
+        if (read_bytes == 0) {
+            cout << "no message from client" << endl;
+        }
+        if (read_bytes < 0) {
+            cout << "error getting a message from client" << endl;
+        }
+        data = buffer;
+        checkingStr(data, distance, vector, neighbor);
+        Knn *knn = new Knn(neighbor, distance, vector);
+        knn->uploadFiles(file);
+        message = knn->getMessage();
+        int length = message.size();
+        char message_to_send[length + 1];
+        strcpy(message_to_send, message.c_str());
+        int send_bytes = send(client_sock, message_to_send, length, 0);
+        if (send_bytes < 0) {
+            cout << "error sending a message" << endl;
+        }
+        delete knn;
     }
-    if(read_bytes < 0) {
-        cout<<"error getting a message from client"<<endl;
-    }
-    data = buffer;
-    checkingStr(data,distance,vector,neighbor);
-    Knn* knn = new Knn(neighbor,distance,vector);
-    knn->uploadFiles(file);
-    message = knn->getMessage();
-    int length = message.size();
-    char message_to_send[length+1];
-    strcpy(message_to_send, message.c_str());
-    int send_bytes = send(client_sock, message_to_send, length, 0);
-    if(send_bytes < 0) {
-        cout<<"error sending a message"<<endl;
-    }
-    delete knn;
 }
