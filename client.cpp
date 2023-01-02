@@ -8,9 +8,8 @@
 #include <string.h>
 #include <vector>
 #include <sstream>
-#include <Ws2tcpip.h>
+#include <ws2tcpip.h>
 #include <cstdlib>
-#include <cerrno>
 #include <stdexcept>
 #include <cfloat>
 #include <valarray>
@@ -86,12 +85,13 @@ void checkingUserInput(string user_input, int sock, int& check) {
 
     int main(int argc, char *argv[]) {
         string user_input;
-        const char *ip_address = argv[1];
-        const int client_port = atoi(argv[2]);
+        const char *ip_address = argv[2];
+        const int client_port = atoi(argv[3]);
         checkingClientArgv(client_port, ip_address);
         int sock = socket(AF_INET, SOCK_STREAM, 0);
         if (sock < 0) {
-            perror("error creating socket");
+            cout<< "error creating socket" <<endl;
+            exit(1);
         }
         struct sockaddr_in sin;
         memset(&sin, 0, sizeof(sin));
@@ -99,7 +99,7 @@ void checkingUserInput(string user_input, int sock, int& check) {
         sin.sin_addr.s_addr = inet_addr(ip_address);
         sin.sin_port = htons(client_port);
         if (connect(sock, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
-            perror("error connecting to server");
+            cout << "error connecting to server" << endl;
             exit(1);
         }
         while (true) {
