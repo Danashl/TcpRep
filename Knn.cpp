@@ -19,6 +19,7 @@ Knn::Knn(int k, string disName, vector<double> v1) {
     this->k = k;
     this->disName = disName;
     this->vecInput = v1;
+    this->message = "";
 }
 
 /**
@@ -28,7 +29,7 @@ Knn::Knn(int k, string disName, vector<double> v1) {
  * lastly, we have two vectors - on with the distances, and one with the name.
  * @param stringPath - the path to the data we want to upload.
  */
-void Knn::uploadFiles(std::string stringPath) {
+void Knn::uploadFiles(std::string stringPath, int &flag) {
     double res;
     string tempByLine, tempByComma;
     //file pointer
@@ -53,6 +54,7 @@ void Knn::uploadFiles(std::string stringPath) {
         //checking if the vector in data in the same size a vector input
         if(temp.size() != vecInput.size()) {
             cout << "vectors are not in the same size!" << endl;
+            flag = -1;
             return;
         }
         //calling the distance method according to disName
@@ -122,11 +124,19 @@ void Knn::getSignificant(vector<pair<double, string>> pairs) {
     for(i = 0; i < this->k; i++) {
         map[pairs[i].second]++;
         temp = map[pairs[i].second];
-        if(max <= temp) {
+        if (max <= temp) {
             max = temp;
             res = pairs[i].second;
         }
     }
-    cout << res << endl;
+    this->message = res;
+}
+
+/**
+ * get the message to client.
+ * @return the string that knn calculate and the client will print.
+ */
+string Knn::getMessage() {
+    return this->message;
 }
 

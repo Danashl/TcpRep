@@ -12,6 +12,7 @@ class Knn {
 
 private:
     int k;
+    string message;
     string disName;
     string file;
     vector<double> vecInput;
@@ -21,9 +22,10 @@ private:
 
 public:
     Knn(int k, string disName, vector<double> v1);
-    void uploadFiles(string stringPath);
+    void uploadFiles(string stringPath, int &flag);
     void pushingToPairs(vector<double> d1, vector<string> s1);
     void sortingByDistance(vector<pair<double,string>> resVec);
     void getSignificant(vector<pair<double, string>> sortVec);
+    string getMessage();
 };
 #endif //KNNREP_KNN_H
