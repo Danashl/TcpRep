@@ -79,7 +79,7 @@ int checkingStr(string str,string &distance, vector<double> &v1, int &k, int &fl
  */
 void checkingArgv(int port, string fileName) {
     string str2 = "csv";
-   if(port < 1 || port > 65535) {
+   if(port < 1024 || port > 65535) {
        cout<< "invalid port number!"<< endl;
        exit(1);
    }
@@ -103,6 +103,7 @@ int main (int argc, char *argv[]) {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         cout << "error creating socket" << endl;
+        exit(1);
     }
     struct sockaddr_in sin;
     memset(&sin, 0, sizeof(sin));
@@ -111,9 +112,11 @@ int main (int argc, char *argv[]) {
     sin.sin_port = htons(server_port);
     if (bind(sock, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
         cout << "error binding socket" << endl;
+        exit(1);
     }
     if (listen(sock, 5) < 0) {
         cout << "error listening to a socket" << endl;
+        exit(1);
     }
     struct sockaddr client_sin;
     unsigned int addr_len = sizeof(client_sin);
@@ -121,6 +124,7 @@ int main (int argc, char *argv[]) {
         int client_sock = accept(sock, (struct sockaddr *) &client_sin, &addr_len);
         if (client_sock < 0) {
             cout << "error accepting client" << endl;
+            break;
         }
         while (true) {
             char buffer[4096];
@@ -128,15 +132,17 @@ int main (int argc, char *argv[]) {
             int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
             if (read_bytes == 0) {
                 cout << "no message from client" << endl;
+                break;
             }
             if (read_bytes < 0) {
                 cout << "error getting a message from client" << endl;
+                break;
             }
             data = buffer;
             res = checkingStr(data, distance, vector, neighbor, flag);
             //in case we found invalid input
             if (res == -1) {
-                message = "invalid";
+                message = "invalid input!";
                 int length = message.length();
                 char invalid_message[length + 1];
                 strcpy(invalid_message, message.c_str());
@@ -151,7 +157,7 @@ int main (int argc, char *argv[]) {
             knn->uploadFiles(file, flag);
             //check if flag is -1 - then something went wrong in knn class
             if (flag == -1) {
-                message = "invalid";
+                message = "invalid input!";
             } else {
                 message = knn->getMessage();
             }
