@@ -23,7 +23,7 @@ using namespace std;
  */
 void checkingClientArgv(int port, string ip_address){
     IN_ADDR sa;
-    if(port < 1023 || port > 65535) {
+    if(port < 1024 || port > 65535) {
         cout << "invalid port number!" << endl;
         exit(1);
     }
