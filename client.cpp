@@ -78,8 +78,8 @@ void checkingUserInput(string user_input, int sock, int& check) {
 
     int main(int argc, char *argv[]) {
         string user_input;
-        const char *ip_address = argv[2];
-        const int client_port = atoi(argv[3]);
+        const char *ip_address = argv[1];
+        const int client_port = atoi(argv[2]);
         checkingClientArgv(client_port, ip_address);
         int sock = socket(AF_INET, SOCK_STREAM, 0);
         if (sock < 0) {
@@ -112,7 +112,7 @@ void checkingUserInput(string user_input, int sock, int& check) {
                     cout << "error sending a message" << endl;
                     break;
                 }
-                char buffer[4096];
+                char buffer[4096] = {0};
                 int expected_data_len = sizeof(buffer);
                 int read_bytes = recv(sock, buffer, expected_data_len, 0);
                 if (read_bytes == 0) {
@@ -126,6 +126,8 @@ void checkingUserInput(string user_input, int sock, int& check) {
                 // convert buffer to a string
                 string result(buffer);
                 cout << result << endl;
+            } else {
+                cout << "invalid input" << endl;
             }
         }
     }

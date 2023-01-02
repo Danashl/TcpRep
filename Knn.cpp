@@ -53,7 +53,7 @@ void Knn::uploadFiles(std::string stringPath, int &flag) {
         }
         //checking if the vector in data in the same size a vector input
         if(temp.size() != vecInput.size()) {
-            cout << "vectors are not in the same size!" << endl;
+            this->message = "invalid input";
             flag = -1;
             return;
         }
@@ -69,6 +69,11 @@ void Knn::uploadFiles(std::string stringPath, int &flag) {
             doubleVec.push_back(res);
         } else if(this->disName == "CAN") {
             res = DistanceClass::getCanDis(temp, vecInput);
+            if(res == -1) {
+                this->message = "invalid input";
+                flag = -1;
+                return;
+            }
             doubleVec.push_back(res);
         } else {
             res = DistanceClass::getMinkDis(temp, vecInput);
@@ -77,15 +82,17 @@ void Knn::uploadFiles(std::string stringPath, int &flag) {
         //check that the distance vector is at the same size as the string vector - if not the file is not proper
         //,so it exit the code.
         if(doubleVec.size() != stringVec.size()) {
-            cout << "The vector in the file is invalid" << endl;
-            exit(0);
+            this->message = "invalid input";
+            flag = -1;
+            return;
         }
     }
     fin.close();
     //checking if k given in bigger then vectors
     if(this->k > doubleVec.size()) {
-        cout << "K is bigger then the vectors in file!" << endl;
-        exit(0);
+        this->message = "invalid input";
+        flag = -1;
+        return;
     }
     pushingToPairs(doubleVec, stringVec);
 }

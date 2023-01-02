@@ -5,11 +5,10 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
-add_executable(TcpRep
+add_executable(server server.cpp
         DistanceClass.cpp
         DistanceClass.h
         Knn.cpp
         Knn.h
-        server.cpp
-        client.cpp
         )
+add_executable(client client.cpp)

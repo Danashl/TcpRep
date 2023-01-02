@@ -36,7 +36,7 @@ double DistanceClass::getCanDis(vector<double> v1, vector<double> v2) {
     int i;
     for (i = 0; i < v1.size(); i++) {
         if (abs(v1.at(i)) + abs(v2.at(i)) == 0) {
-            cout << "Can not divide by zero!" << endl;
+            return -1;
         }
         sum += (abs(v1.at(i) - v2.at(i)) / (abs(v1.at(i)) + abs(v2.at(i))));
     }

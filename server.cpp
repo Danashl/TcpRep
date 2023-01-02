@@ -32,6 +32,7 @@ int checkingArg(int k, string dis, int &flag) {
  */
 int checkingStr(string str,string &distance, vector<double> &v1, int &k, int &flag) {
     k = -1;
+    v1.clear();
     double num;
     int checkInt;
     stringstream ss;
@@ -80,19 +81,17 @@ void checkingArgv(int port, string fileName) {
        cout<< "invalid port number!"<< endl;
        exit(1);
    }
-   if(strstr(fileName.c_str(), str2.c_str())) {
+   if(!(strstr(fileName.c_str(), str2.c_str()))) {
        cout << "invalid file!" << endl;
        exit(1);
    }
 }
 
 int main (int argc, char *argv[]) {
-    string data;
     string message;
     vector<double> vector;
     string distance;
     int neighbor;
-    int flag = 0;
     int res;
     string file = argv[1];
     const int server_port = atoi(argv[2]);
@@ -124,7 +123,8 @@ int main (int argc, char *argv[]) {
             break;
         }
         while (true) {
-            char buffer[4096];
+            int flag = 0;
+            char buffer[4096] = {0};
             int expected_data_len = sizeof(buffer);
             int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
             if (read_bytes == 0) {
@@ -135,11 +135,11 @@ int main (int argc, char *argv[]) {
                 cout << "error getting a message from client" << endl;
                 break;
             }
-            data = buffer;
+            string data = buffer;
             res = checkingStr(data, distance, vector, neighbor, flag);
             //in case we found invalid input
             if (res == -1) {
-                message = "invalid input!";
+                message = "invalid input";
                 int length = message.length();
                 char invalid_message[length + 1];
                 strcpy(invalid_message, message.c_str());
@@ -147,25 +147,25 @@ int main (int argc, char *argv[]) {
                 if (send_bytes < 0) {
                     cout << "error sending a message" << endl;
                 }
-                break;
-            }
-            //if the input is valid
-            Knn *knn = new Knn(neighbor, distance, vector);
-            knn->uploadFiles(file, flag);
-            //check if flag is -1 - then something went wrong in knn class
-            if (flag == -1) {
-                message = "invalid input!";
             } else {
-                message = knn->getMessage();
+                //if the input is valid
+                Knn *knn = new Knn(neighbor, distance, vector);
+                knn->uploadFiles(file, flag);
+                //check if flag is -1 - then something went wrong in knn class
+                if (flag == -1) {
+                    message = "invalid input";
+                } else {
+                    message = knn->getMessage();
+                }
+                int length = message.length();
+                char message_to_send[length + 1];
+                strcpy(message_to_send, message.c_str());
+                int send_bytes = send(client_sock, message_to_send, length, 0);
+                if (send_bytes < 0) {
+                    cout << "error sending a message" << endl;
+                }
+                delete knn;
             }
-            int length = message.length();
-            char message_to_send[length + 1];
-            strcpy(message_to_send, message.c_str());
-            int send_bytes = send(client_sock, message_to_send, length, 0);
-            if (send_bytes < 0) {
-                cout << "error sending a message" << endl;
-            }
-            delete knn;
         }
     }
 }
