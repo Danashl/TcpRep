@@ -11,3 +11,5 @@ add_executable(TcpRep
         Knn.cpp
         Knn.h
         main.cpp client.cpp)
+
+target_link_libraries(TcpRep ws2_32)

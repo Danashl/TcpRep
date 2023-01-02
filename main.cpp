@@ -1,3 +1,4 @@
+/*
 #include <string>
 #include <string.h>
 #include <iostream>
@@ -10,13 +11,15 @@
 
 using namespace std;
 
+*/
 /**
  * check that the user added values and that all the values are numbers.
  * if not - it prints an error to the user and changes a flag so later the code will not go to the knn part.
  * @param str1 - the vector from the user.
  * @param flag - an indicator for the validate of the vector.
  * @return the values that the user entered in a vector.
- */
+ *//*
+
 vector<double> checkingInput(string str1, int& flag) {
     vector<double> v1;
     double num;
@@ -38,12 +41,14 @@ vector<double> checkingInput(string str1, int& flag) {
     return v1;
 }
 
+*/
 /**
  * check that the arguments in the line command are valid
  * (that k is an positive number and that the distance is one of the distance options from the previous exercise).
  * if not - it prints an error to the user and exit the code.
  * @param argv - the arguments in the line command.
- */
+ *//*
+
 void checkingArgv(char *argv[]) {
     if((stoi(argv[1])<=0) ||
             ((strcmp(argv[3],"AUC")!=0) && (strcmp(argv[3],"MAN")!=0) && (strcmp(argv[3],"CHB")!=0)
@@ -53,13 +58,15 @@ void checkingArgv(char *argv[]) {
     }
 }
 
+*/
 /**
  * the main function - get arguments from the line command and a vector from the user,
  * check validate and call the knn methods.
  * @param argc - the number of the values in argv.
  * @param argv - the arguments in the line command - k - the k nearest neighbors, file - the file with all the vector
  * for comparing, and distance - the distance method that the user want to compare by.
- */
+ *//*
+
 int main (int argc, char *argv[]) {
     int flag = 0;
     vector<double> vecInput;
@@ -86,3 +93,4 @@ int main (int argc, char *argv[]) {
         flag = 0;
     }
 }
+*/
