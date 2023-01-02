@@ -11,4 +11,4 @@ add_executable(TcpRep
         Knn.cpp
         Knn.h
         server.cpp
-        main.cpp)
+        )
