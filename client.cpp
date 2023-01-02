@@ -117,16 +117,18 @@ void checkingUserInput(string user_input, int sock, int& check) {
                 int sent_bytes = send(sock, data_addr, data_len, 0);
                 if (sent_bytes < 0) {
                     cout << "error sending a message" << endl;
+                    break;
                 }
-
                 char buffer[4096];
                 int expected_data_len = sizeof(buffer);
                 int read_bytes = recv(sock, buffer, expected_data_len, 0);
                 if (read_bytes == 0) {
                     cout << "no result from the server" << endl;
+                    break;
                 }
                 if (read_bytes < 0) {
                     cout << "error getting a message from the server" << endl;
+                    break;
                 }
                 // convert buffer to a string
                 string result(buffer);
