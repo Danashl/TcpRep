@@ -3,11 +3,13 @@
 //
 
 #include <iostream>
-#include "winsock2.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 #include <string.h>
 #include <vector>
 #include <sstream>
-#include <ws2tcpip.h>
 #include <cstdlib>
 #include <stdexcept>
 #include <cfloat>
@@ -21,12 +23,12 @@ using namespace std;
  * @param ip_address - the IP address - should be in IP4 format.
  */
 void checkingClientArgv(int port, string ip_address){
-    IN_ADDR sa;
+    uint32_t sa;
     if(port < 1024 || port > 65535) {
         cout << "invalid port number!" << endl;
         exit(1);
     }
-    int checkIP = InetPton(AF_INET, ip_address.c_str() ,&sa);
+    int checkIP = inet_pton(AF_INET, ip_address.c_str() ,&sa);
     if (checkIP != 1){
         cout << "invalid IP address!" << endl;
         exit(1);
@@ -40,15 +42,7 @@ void checkingUserInput(string user_input, int sock, int& check) {
     int intNum;
 
     if(user_input == "-1"){
-
-        // Initialize the WinSock library
-        //WSADATA wsaData;
-        //int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
-        //if (result != 0) {
-        //    cout << "error closing socket";
-        // Handle the error and exit
-
-        closesocket(sock);
+        close(sock);
         exit(1);
     }
     stringstream ss(user_input);
