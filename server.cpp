@@ -16,13 +16,14 @@ using namespace std;
  * @param k - should be a number > 0.
  * @param dis - should be one of the distance we got in knn.
  */
-void checkingArg(int k, string dis) {
+int checkingArg(int k, string dis, int &flag) {
     if((k<=0) ||
        ((dis != "AUC") && (dis != "MAN") && (dis != "CHB")
         && (dis != "CAN") && (dis != "MIN"))) {
-        cout << "Input not valid!" << endl;
-        return;
+       flag = -1;
+        return flag;
     }
+    return flag;
 }
 
 /**
@@ -32,7 +33,7 @@ void checkingArg(int k, string dis) {
  * @param v1 - vector for calculating distance.
  * @param k - the k neighbors.
  */
-void checkingStr(string str,string &distance, vector<double> &v1, int &k) {
+int checkingStr(string str,string &distance, vector<double> &v1, int &k, int &flag) {
     k = -1;
     double num;
     int checkInt;
@@ -43,8 +44,8 @@ void checkingStr(string str,string &distance, vector<double> &v1, int &k) {
         v1.push_back(num);
     }
     if (v1.empty()) {
-        cout << "invalid input" << endl;
-        return;
+        flag = -1;
+        return flag;
     }
     stringstream1.clear();
     if(stringstream1 >> checkStr) {
@@ -52,21 +53,23 @@ void checkingStr(string str,string &distance, vector<double> &v1, int &k) {
     }
     distance = ss.str();
     if (str.empty()) {
-        cout << "invalid input" << endl;
-        return;
+        flag = -1;
+        return flag;
     }
     stringstream1.clear();
     if (stringstream1 >> checkInt) {
         k = checkInt;
     }
     if (k == -1) {
-        cout << "invalid input" << endl;
-        return;
+        flag = -1;
+        return flag;
     }
     if(!stringstream1.eof()) {
-        cout << "invalid input" << endl;
+        flag = -1;
+        return flag;
     }
-    checkingArg(k, distance);
+    int res = checkingArg(k, distance,flag);
+    return res;
 }
 
 /**
@@ -92,6 +95,8 @@ int main (int argc, char *argv[]) {
     vector<double> vector;
     string distance;
     int neighbor;
+    int flag = 0;
+    int res;
     string file = argv[1];
     const int server_port = atoi(argv[2]);
     checkingArgv(server_port, file);
@@ -127,11 +132,29 @@ int main (int argc, char *argv[]) {
             cout << "error getting a message from client" << endl;
         }
         data = buffer;
-        checkingStr(data, distance, vector, neighbor);
+        res = checkingStr(data, distance, vector, neighbor,flag);
+        //in case we found invalid input
+        if(res == -1) {
+            message = "invalid";
+            int length = message.length();
+            char invalid_message[length+1];
+            strcpy(invalid_message, message.c_str());
+            int send_bytes = send(client_sock, invalid_message, length, 0);
+            if (send_bytes < 0) {
+                cout << "error sending a message" << endl;
+            }
+            break;
+        }
+        //if the input is valid
         Knn *knn = new Knn(neighbor, distance, vector);
-        knn->uploadFiles(file);
-        message = knn->getMessage();
-        int length = message.size();
+        knn->uploadFiles(file,flag);
+        //check if flag is -1 - then something went wrong in knn class
+        if(flag == -1) {
+            message = "invalid";
+        } else {
+            message = knn->getMessage();
+        }
+        int length = message.length();
         char message_to_send[length + 1];
         strcpy(message_to_send, message.c_str());
         int send_bytes = send(client_sock, message_to_send, length, 0);

@@ -29,7 +29,7 @@ Knn::Knn(int k, string disName, vector<double> v1) {
  * lastly, we have two vectors - on with the distances, and one with the name.
  * @param stringPath - the path to the data we want to upload.
  */
-void Knn::uploadFiles(std::string stringPath) {
+void Knn::uploadFiles(std::string stringPath, int &flag) {
     double res;
     string tempByLine, tempByComma;
     //file pointer
@@ -54,6 +54,7 @@ void Knn::uploadFiles(std::string stringPath) {
         //checking if the vector in data in the same size a vector input
         if(temp.size() != vecInput.size()) {
             cout << "vectors are not in the same size!" << endl;
+            flag = -1;
             return;
         }
         //calling the distance method according to disName
