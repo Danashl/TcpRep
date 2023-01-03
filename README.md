@@ -19,7 +19,7 @@ For executing the code we need to run the following command: make
 
 The server will be activated by: server.out file port
 The client will be activated by: client.out ip port
-and then insert input of vector, dustance method and a k to the client.
+and then insert input of vector, distance method and a k to the client.
 
 For example: server.out iris_classified.csv 5555 , client.out 127.0.0.1 5555 , 1 2 3 4 MAN 3
 The sever and the client will connect via port 5555. The client will send the sever the user input (1 2 3 4 MAN 3) and the server will classify it using the 3 closest neighbors in iris_classified file. Then the server will send the result to the client who will print it and take new input from user.
