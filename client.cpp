@@ -19,7 +19,7 @@ using namespace std;
 
 /**
  * checking arguments for the client.
- * @param port - the port number - should be between 1 to 65535.
+ * @param port - the port number - should be between 1024 to 65535.
  * @param ip_address - the IP address - should be in IP4 format.
  */
 void checkingClientArgv(int port, string ip_address){
